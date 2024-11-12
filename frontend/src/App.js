@@ -9,30 +9,44 @@ import ReadStory from './components/ReadStory';
 import UserProfile from './components/UserProfile';
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // Track login state
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const handleSignOut = () => {
-    setIsLoggedIn(false); // Update state to logged out
-    // Logic to clear authentication (e.g., remove token)
+    setIsLoggedIn(false);
   };
 
   return (
     <Router>
-      <div className="min-h-screen bg-gray-100">
-        <nav className="bg-gray-800 p-4">
-          <div className="container mx-auto flex justify-between">
-            <div className="text-white font-bold text-lg">Story Platform</div>
-            <div>
-              <Link to="/" className="text-gray-300 hover:text-white mx-2">Home</Link>
+      <div className="font-sans min-h-screen bg-gray-100">
+        <nav className="bg-[#2e003e] p-4 shadow-lg">
+          <div className="container mx-auto flex justify-between items-center">
+            <div className="text-blue-300 font-extrabold text-2xl tracking-wide">
+              Story Platform
+            </div>
+            <div className="flex space-x-4">
+              <Link to="/" className="text-blue-300 hover:text-blue-500 transition duration-200">
+                Home
+              </Link>
               {isLoggedIn ? (
                 <>
-                  <Link to="/dashboard" className="text-gray-300 hover:text-white mx-2">Dashboard</Link>
-                  <button onClick={handleSignOut} className="text-gray-300 hover:text-white mx-2">Sign Out</button>
+                  <Link to="/dashboard" className="text-blue-300 hover:text-blue-500 transition duration-200">
+                    Dashboard
+                  </Link>
+                  <button
+                    onClick={handleSignOut}
+                    className="text-blue-300 hover:text-blue-500 transition duration-200"
+                  >
+                    Sign Out
+                  </button>
                 </>
               ) : (
                 <>
-                  <Link to="/signin" className="text-gray-300 hover:text-white mx-2">Sign In</Link>
-                  <Link to="/signup" className="text-gray-300 hover:text-white mx-2">Sign Up</Link>
+                  <Link to="/signin" className="text-blue-300 hover:text-blue-500 transition duration-200">
+                    Sign In
+                  </Link>
+                  <Link to="/signup" className="text-blue-300 hover:text-blue-500 transition duration-200">
+                    Sign Up
+                  </Link>
                 </>
               )}
             </div>

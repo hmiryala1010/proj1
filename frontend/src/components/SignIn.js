@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-const SignIn = () => {
+const SignIn = ({ setIsLoggedIn }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -14,37 +16,42 @@ const SignIn = () => {
       return;
     }
 
-    // Logic to handle user authentication (e.g., API call)
-    console.log({ email, password });
-    // Redirect on successful login or show error message
+    if (email === 'hasini.miryala123@gmail.com' && password === 'mani') {
+      setIsLoggedIn(true); // Update login state
+      navigate('/dashboard'); // Redirect to dashboard
+    } else {
+      setError('Invalid email or password.');
+    }
   };
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold">Sign In</h1>
-      {error && <p className="text-red-500">{error}</p>}
-      <form onSubmit={handleSubmit} className="mt-4">
-        <input
-          type="email"
-          placeholder="Email"
-          className="border p-2 w-full mt-2"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          className="border p-2 w-full mt-2"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <button
-          type="submit"
-          className="bg-blue-500 text-white font-bold py-2 px-4 mt-2 text-sm md:text-base lg:text-lg"
-        >
-          Sign In
-        </button>
-      </form>
+    <div className="min-h-screen bg-gradient-to-r from-blue-200 to-purple-500 flex items-center justify-center px-4">
+      <div className="max-w-md w-full p-8 bg-white shadow-xl rounded-lg animate-fadeIn transition duration-500 ease-in-out transform hover:scale-105">
+        <h1 className="text-3xl font-extrabold text-gray-800 mb-4 text-center">Sign In</h1>
+        {error && <p className="text-red-500 mb-4 text-center">{error}</p>}
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <input
+            type="email"
+            placeholder="Email"
+            className="border border-gray-300 p-3 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            className="border border-gray-300 p-3 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <button
+            type="submit"
+            className="w-full bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800 text-white font-bold py-3 rounded-lg shadow-lg transform transition duration-300 hover:scale-105"
+          >
+            Sign In
+          </button>
+        </form>
+      </div>
     </div>
   );
 };

@@ -10,22 +10,21 @@ const EditStory = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Sample initial data to simulate fetching from an API
-  const initialStoryData = { id, title: 'Sample Story Title', content: 'Sample story content.' };
-
   // Fetch story data (simulated here for now)
   useEffect(() => {
-    // Simulate API call delay
+    // Simulate an API call delay using setTimeout
     setTimeout(() => {
       try {
-        setStory(initialStoryData);
+        // Sample logic to fetch story data by ID
+        const initialStoryData = { id, title: `Story Title ${id}`, content: `Content for story ID ${id}.` };
+        setStory(initialStoryData); // Set the story based on the ID
       } catch (err) {
         setError('Failed to fetch story data.');
       } finally {
         setIsLoading(false);
       }
-    }, 1000);
-  }, [id]);
+    }, 1000); // Delay for 1 second to simulate the fetching time
+  }, [id]); // Dependency array includes only `id`, since it's the dynamic value
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;

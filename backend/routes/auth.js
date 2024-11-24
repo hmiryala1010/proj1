@@ -1,36 +1,97 @@
+// backend/routes/auth.js
+const express = require("express");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const User = require("../models/User"); // Assuming you have a User model defined
+const router = express.Router();
+ 
 
-// const express = require('express');
-// const bcrypt = require('bcrypt');
+// Function to generate a JWT
+const generateToken = (user) => {
+  const payload = {
+    id: user.id,
+    username: user.username,
+  };
 
-// const router = express.Router();
+  const options = {
+    expiresIn: '1h', // Token expiration time
+  };
 
-// module.exports = (pool) => {
-//   // Sign Up Route
-//   router.post('/signup', async (req, res) => {
-//     const { username, email, password } = req.body;
+  const token = jwt.sign(payload, process.env.JWT_SECRET, options);
+  return token;
+};
 
-//     if (!username || !email || !password) {
-//       return res.status(400).json({ message: 'All fields are required.' });
-//     }
+module.exports = { generateToken };
 
-//     try {
-//       // Check if user already exists
-//       const existingUser = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
-//       if (existingUser.rows.length > 0) {
-//         return res.status(400).json({ message: 'User already exists.' });
-//       }
 
-//       // Hash the password
-//       const hashedPassword = await bcrypt.hash(password, 10);
+if (!process.env.JWT_SECRET) {
+  throw new Error("JWT_SECRET is not defined");
+}
 
-//       // Create a new user
-//       await pool.query('INSERT INTO users (username, email, password) VALUES ($1, $2, $3)', [username, email, hashedPassword]);
-//       res.status(201).json({ message: 'User created successfully!' });
-//     } catch (error) {
-//       console.error(error);
-//       res.status(500).json({ message: 'Internal Server Error' });
-//     }
-//   });
 
-//   return router;
-// };
+// User SignUp Route
+router.post("/signup", async (req, res) => {
+  const { username, email, password } = req.body;
+
+  if (!username || !email || !password) {
+    return res.status(400).json({ message: "All fields are required" });
+  }
+
+  try {
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ message: "User already exists" });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const newUser = new User({
+      username,
+      email,
+      password: hashedPassword,
+    });
+
+    await newUser.save();
+    res.status(201).json({ message: "User created successfully!" });
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// User SignIn Route
+router.post("/signin", async (req, res) => {
+    const { email, password } = req.body;
+  
+    if (!email || !password) {
+      return res.status(400).json({ message: "Both fields are required" });
+    }
+  
+    try {
+      const user = await User.findOne({ email });
+      if (!user) {
+        console.log("User not found");
+        return res.status(400).json({ message: "Invalid email or password" });
+      }
+  
+      const isMatch = await bcrypt.compare(password, user.password);
+      if (!isMatch) {
+        console.log("Password does not match");
+        return res.status(400).json({ message: "Invalid email or password" });
+      }
+  
+      // Check if JWT_SECRET is set
+      if (!process.env.JWT_SECRET) {
+        console.error("JWT_SECRET not defined in environment variables");
+        return res.status(500).json({ message: "Server configuration error" });
+      }
+  
+      const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
+      res.status(200).json({ message: "Login successful", token });
+    } catch (err) {
+      console.error("Error in signin route:", err.message);
+      res.status(500).json({ message: "Server error" });
+    }
+  });
+  
+
+module.exports = router;

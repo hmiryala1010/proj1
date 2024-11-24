@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 const StoryList = () => {
   const [stories, setStories] = useState([]);
@@ -21,7 +22,7 @@ const StoryList = () => {
 
   return (
     <div className="container mx-auto p-6 max-w-3xl bg-white shadow-md rounded-lg">
-      <h2 className="text-2xl font-bold text-gray-800 mb-4">Your Stories</h2>
+      <h2 className="text-2xl font-bold text-gray-800 mb-4">Available Stories</h2>
 
       {isLoading && (
         <div className="flex justify-center items-center">
@@ -38,10 +39,24 @@ const StoryList = () => {
           stories.map((story) => (
             <div
               key={story._id}
-              className="border-b p-4 hover:bg-gray-100 transition-all duration-300"
+              className="border-b p-4 hover:bg-gray-100 transition-all duration-300 rounded-lg"
             >
-              <h3 className="font-semibold text-xl text-gray-800">{story.title}</h3>
-              <p className="text-gray-600 mt-2">{story.content || "No content available."}</p>
+              <Link to={`/story/${story._id}`} className="text-blue-600 hover:text-blue-800">
+                <h3 className="font-semibold text-xl text-gray-800">{story.title}</h3>
+              </Link>
+              <p className="text-gray-600 mt-2">
+                {story.content ? `${story.content.substring(0, 100)}...` : "No content available."}
+              </p>
+              <div className="mt-2 text-sm text-gray-500">
+                <p>By: {story.author || "Anonymous"}</p>
+                <p>{new Date(story.createdAt).toLocaleDateString()}</p>
+              </div>
+              <Link
+                to={`/story/${story._id}`}
+                className="text-blue-500 hover:underline mt-4 inline-block text-sm"
+              >
+                Read Full Story
+              </Link>
             </div>
           ))
         )}
@@ -49,6 +64,5 @@ const StoryList = () => {
     </div>
   );
 };
-
 
 export default StoryList;

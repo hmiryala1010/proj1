@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+ 
 
 const SignUp = () => {
   const [username, setUsername] = useState('');
@@ -9,35 +10,35 @@ const SignUp = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
-    setSuccess('');
-
+    setError("");
+    setSuccess("");
+  
     if (!username || !email || !password) {
-      setError('All fields are required.');
+      setError("All fields are required.");
       return;
     }
-
+  
     try {
-      // Logic to handle user registration (API call)
-      const response = await fetch('http://localhost:5000/api/auth/signup', {
-        method: 'POST',
+      const response = await fetch("http://localhost:5000/api/auth/signup", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ username, email, password }),
       });
-
+  
       const data = await response.json();
-
+  
       if (!response.ok) {
-        throw new Error(data.message || 'Something went wrong.');
+        throw new Error(data.message || "Something went wrong.");
       }
-
-      setSuccess('User created successfully!');
+  
+      setSuccess("User created successfully!");
     } catch (err) {
       setError(err.message);
     }
   };
+  
 
   return (
     <div className="min-h-screen bg-gradient-to-r from-blue-200 to-purple-500 flex items-center justify-center px-4">

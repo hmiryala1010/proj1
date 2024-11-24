@@ -8,6 +8,10 @@ import CreateStory from './components/CreateStory';
 import ReadStory from './components/ReadStory';
 import UserProfile from './components/UserProfile';
 import EditStory from './components/EditStory';
+import ContributionForm from './components/ContributionForm';
+import ContributionList from './components/ContributionList';
+import StoryList from './components/StoryList';
+import ErrorPage from './components/ErrorPage';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -60,14 +64,21 @@ function App() {
         <Route path="/signup" element={<SignUp />} />
         <Route
           path="/signin"
-          element={<SignIn setIsLoggedIn={setIsLoggedIn} />} // Pass the function as a prop
+          element={<SignIn setIsLoggedIn={setIsLoggedIn} />}
         />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/create" element={<CreateStory />} />
         <Route path="/story/:id" element={<ReadStory />} />
         <Route path="/profile" element={<UserProfile />} />
-        <Route path="/edit/:id" element={<EditStory />} /> {/* Add this route for editing */}
-        <Route path="/profile" element={<UserProfile />} /> 
+        <Route path="/edit/:id" element={<EditStory />} />
+
+        {/* Additional Routes */}
+        <Route path="/contribute/:id" element={<ContributionForm />} />
+        <Route path="/contributions/:storyId" element={<ContributionList />} />
+        <Route path="/stories" element={<StoryList />} />
+
+        {/* Error Page for unmatched routes */}
+        <Route path="*" element={<ErrorPage />} />
       </Routes>
     </div>
   );

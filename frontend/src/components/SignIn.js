@@ -7,22 +7,38 @@ const SignIn = ({ setIsLoggedIn }) => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
-
+    setError("");
+  
     if (!email || !password) {
-      setError('Both fields are required.');
+      setError("Both fields are required.");
       return;
     }
-
-    if (email === 'hasini.miryala123@gmail.com' && password === 'mani') {
-      setIsLoggedIn(true); // Update login state
-      navigate('/dashboard'); // Redirect to dashboard
-    } else {
-      setError('Invalid email or password.');
+  
+    try {
+      const response = await fetch("http://localhost:5000/api/auth/signin", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+  
+      const data = await response.json();
+  
+      if (!response.ok) {
+        throw new Error(data.message || "Something went wrong.");
+      }
+       // Store the JWT token in localStorage or sessionStorage
+       localStorage.setItem("authToken", data.token);
+      setIsLoggedIn(true);
+      navigate("/dashboard"); // Redirect to dashboard
+    } catch (err) {
+      setError(err.message);
     }
   };
+  
 
   return (
     <div className="min-h-screen bg-gradient-to-r from-blue-200 to-purple-500 flex items-center justify-center px-4">

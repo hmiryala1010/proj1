@@ -21,21 +21,7 @@ const Home = () => {
           </p>
         </section>
 
-        {/* Call-to-Action Buttons */}
-        {/* <div className="mt-8 flex flex-wrap justify-center gap-4">
-          <Link
-            to="/create"
-            className="bg-gradient-to-r from-blue-400 to-blue-600 hover:from-blue-500 hover:to-blue-700 text-white font-bold py-2 px-6 rounded-lg shadow-lg transition duration-300 transform hover:scale-110 hover:rotate-1 text-sm md:text-base lg:text-lg"
-          >
-            Create a Story
-          </Link>
-          <Link
-            to="/dashboard"
-            className="bg-gradient-to-r from-green-400 to-green-600 hover:from-green-500 hover:to-green-700 text-white font-bold py-2 px-6 rounded-lg shadow-lg transition duration-300 transform hover:scale-110 hover:-rotate-1 text-sm md:text-base lg:text-lg"
-          >
-            View Dashboard
-          </Link>
-        </div> */}
+         
 
         {/* Features Section */}
         <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
